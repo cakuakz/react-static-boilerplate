@@ -51,7 +51,7 @@ export default function MainPage() {
 
       <Link
         to="/component"
-        className="mt-10 inline-block bg-primary text-white font-medium px-6 py-3 rounded-xl shadow hover:shadow-md transition duration-200"
+        className="mt-10 inline-block bg-primary text-neutral-300 dark:text-neutral-600 font-medium px-6 py-3 rounded-xl shadow hover:shadow-md transition duration-200"
       >
         View Components
       </Link>

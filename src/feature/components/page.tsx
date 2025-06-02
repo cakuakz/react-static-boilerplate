@@ -14,25 +14,31 @@ export default function ComponentPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <Link
           to="/component/button-page"
-          className="bg-primary text-white px-5 py-3 rounded-2xl shadow hover:shadow-lg transition duration-200 text-center"
+          className="bg-primary text-neutral-300 dark:text-neutral-600 px-5 py-3 rounded-2xl shadow hover:shadow-lg transition duration-200 text-center"
         >
           Button Component
         </Link>
 
         <Link
           to="/component/tabs-page"
-          className="bg-primary text-white px-5 py-3 rounded-2xl shadow hover:shadow-lg transition duration-200 text-center"
+          className="bg-primary text-neutral-300 dark:text-neutral-600 px-5 py-3 rounded-2xl shadow hover:shadow-lg transition duration-200 text-center"
         >
           Tabs Component
         </Link>
 
         <Link
-          to="/component/modal-page"
-          className="bg-primary text-white px-5 py-3 rounded-2xl shadow hover:shadow-lg transition duration-200 text-center"
+          to="/component/badge-page"
+          className="bg-primary text-neutral-300 dark:text-neutral-600 px-5 py-3 rounded-2xl shadow hover:shadow-lg transition duration-200 text-center"
         >
-          Modal Component
+          Badge Component
         </Link>
 
+        <Link
+          to="/component/autocomplete-page"
+          className="bg-primary text-neutral-300 dark:text-neutral-600 px-5 py-3 rounded-2xl shadow hover:shadow-lg transition duration-200 text-center"
+        >
+          Autocomplete Component
+        </Link>
         {/* Add more components as needed */}
       </div>
     </div>
