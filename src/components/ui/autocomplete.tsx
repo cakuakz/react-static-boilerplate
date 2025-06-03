@@ -1,22 +1,22 @@
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import React, { useRef, useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { Input } from '@/components/ui/input'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import React, { useRef, useState, useEffect, useMemo } from 'react'
+import { X } from 'lucide-react'
 
 type Option = {
-  label: string;
-  value: string;
-  element?: React.ReactNode;
-};
+  label: string
+  value: string
+  element?: React.ReactNode
+}
 
 type AutocompleteProps = {
-  options: Option[];
-  label?: string;
-  name: string;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-};
+  options: Option[]
+  label?: string
+  name: string
+  value: string
+  onChange: (value: string) => void
+  error?: string
+}
 
 /**
  * Autocomplete component for selecting options from a list.
@@ -54,103 +54,120 @@ export default function Autocomplete({
   name,
   value,
   onChange,
-  error,
+  error
 }: AutocompleteProps) {
-  const searchRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const queryRef = useRef(value || "");
-  const [query, setQuery] = useState<string>(value || "");
-  const [selectedElement, setSelectedElement] = useState<React.ReactNode | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const searchRef = useRef<HTMLInputElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const queryRef = useRef(value || '')
+  const [query, setQuery] = useState<string>(value || '')
+  const [selectedElement, setSelectedElement] =
+    useState<React.ReactNode | null>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [highlightedIndex, setHighlightedIndex] = useState(-1)
 
   useEffect(() => {
-    const selectedOption = options.find(option => option.value === value);
+    const selectedOption = options.find((option) => option.value === value)
     if (selectedOption) {
-      queryRef.current = selectedOption.label;
-      setQuery(selectedOption.label);
-      setSelectedElement(selectedOption.element || null);
+      queryRef.current = selectedOption.label
+      setQuery(selectedOption.label)
+      setSelectedElement(selectedOption.element || null)
     }
-  }, [value, options]);
+  }, [value, options])
 
-  const filteredOptions = options.filter(option =>
-    option.label.toLowerCase().includes(queryRef.current.toLowerCase())
-  );
+  const filteredOptions = useMemo(
+    () =>
+      options.filter((option) =>
+        option.label.toLowerCase().includes(queryRef.current.toLowerCase())
+      ),
+    [options]
+  )
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuery = e.target.value;
-    queryRef.current = newQuery;
-    onChange(newQuery);
-    setQuery(newQuery);
-    setIsOpen(true);
-    setHighlightedIndex(-1);
-  };
+    const newQuery = e.target.value
+    queryRef.current = newQuery
+    onChange(newQuery)
+    setQuery(newQuery)
+    setIsOpen(true)
+    setHighlightedIndex(-1)
+  }
 
   const handleClear = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    queryRef.current = "";
-    setQuery("");
-    onChange("");
-    setSelectedElement(null);
-    setIsOpen(false);
-    setHighlightedIndex(-1);
+    e.preventDefault()
+    e.stopPropagation()
+    queryRef.current = ''
+    setQuery('')
+    onChange('')
+    setSelectedElement(null)
+    setIsOpen(false)
+    setHighlightedIndex(-1)
     if (searchRef.current) {
-      searchRef.current.focus();
+      searchRef.current.focus()
     }
-  };
+  }
 
   const handleOptionClick = (option: Option) => {
-    queryRef.current = option.label;
-    setQuery(queryRef.current);
-    onChange(option.value);
-    setSelectedElement(option.element || null);
-    setHighlightedIndex(-1);
+    queryRef.current = option.label
+    setQuery(queryRef.current)
+    onChange(option.value)
+    setSelectedElement(option.element || null)
+    setHighlightedIndex(-1)
     setTimeout(() => {
-      setIsOpen(false);
-    }, 100);
+      setIsOpen(false)
+    }, 100)
     if (searchRef.current) {
-      searchRef.current.focus();
+      searchRef.current.focus()
     }
-  };
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent, option?: Option) => {
     if (option) {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleOptionClick(option);
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        handleOptionClick(option)
       }
-      return;
+      return
     }
 
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setIsOpen(true);
-      setHighlightedIndex(prev => (prev < filteredOptions.length - 1 ? prev + 1 : prev));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setHighlightedIndex(prev => (prev > 0 ? prev - 1 : prev));
-    } else if (e.key === "Enter" && highlightedIndex >= 0) {
-      e.preventDefault();
-      handleOptionClick(filteredOptions[highlightedIndex]);
-    } else if (e.key === "Escape") {
-      e.preventDefault();
-      setIsOpen(false);
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setIsOpen(true)
+      setHighlightedIndex((prev) =>
+        prev < filteredOptions.length - 1 ? prev + 1 : prev
+      )
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : prev))
+    } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+      e.preventDefault()
+      handleOptionClick(filteredOptions[highlightedIndex])
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      setIsOpen(false)
     }
-  };
+  }
 
   const handleBlur = (e: React.FocusEvent) => {
-    if (containerRef.current && !containerRef.current.contains(e.relatedTarget)) {
-      setIsOpen(false);
+    if (
+      containerRef.current &&
+      !containerRef.current.contains(e.relatedTarget)
+    ) {
+      setIsOpen(false)
     }
-  };
+  }
 
-  const showClearButton = query.length > 0 || selectedElement;
+  const showClearButton = query.length > 0 || selectedElement
 
   return (
-    <div className="relative flex w-full flex-col" onBlur={handleBlur} ref={containerRef}>
+    <div
+      className="relative flex w-full flex-col"
+      onBlur={handleBlur}
+      ref={containerRef}
+    >
       {!!label && (
-        <label className="mb-1 block text-sm font-medium text-gray-600 dark:text-gray-300" htmlFor={name}>
+        <label
+          className="mb-1 block text-sm font-medium text-gray-600 dark:text-gray-300"
+          htmlFor={name}
+        >
           {label}
         </label>
       )}
@@ -160,9 +177,9 @@ export default function Autocomplete({
             <div
               className="w-full cursor-text rounded-md border bg-white p-2 pr-8"
               onClick={() => searchRef.current?.focus()}
-              onKeyDown={e => {
-                if (e.key === "Enter" || e.key === " ") {
-                  searchRef.current?.focus();
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  searchRef.current?.focus()
                 }
               }}
               role="button"
@@ -196,7 +213,7 @@ export default function Autocomplete({
               placeholder="Search"
               ref={searchRef}
               role="combobox"
-              type="text" 
+              type="text"
               value={query}
             />
             {showClearButton && (
@@ -226,11 +243,11 @@ export default function Autocomplete({
                   <div
                     aria-selected={highlightedIndex === index}
                     className={`cursor-pointer rounded-sm px-3 py-2 text-sm hover:bg-gray-100/30 ${
-                      highlightedIndex === index ? "bg-gray-100" : ""
+                      highlightedIndex === index ? 'bg-gray-100' : ''
                     }`}
                     key={option.value}
                     onClick={() => handleOptionClick(option)}
-                    onKeyDown={e => handleKeyDown(e, option)}
+                    onKeyDown={(e) => handleKeyDown(e, option)}
                     role="option"
                     tabIndex={0}
                   >
@@ -238,7 +255,9 @@ export default function Autocomplete({
                   </div>
                 ))
               ) : (
-                <div className="px-3 py-2 text-sm text-gray-500">No results</div>
+                <div className="px-3 py-2 text-sm text-gray-500">
+                  No results
+                </div>
               )}
             </div>
           </ScrollArea>
@@ -246,5 +265,5 @@ export default function Autocomplete({
       )}
       {!!error && <p className="mt-1 text-xs text-red-500">{error}</p>}
     </div>
-  );
+  )
 }

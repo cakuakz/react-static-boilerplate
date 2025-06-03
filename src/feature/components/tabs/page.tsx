@@ -1,4 +1,9 @@
-import { BasicTabs, IconNavigationTabs, UnderlinedTabs, WithBadgeTabs } from './components'
+import {
+  BasicTabs,
+  IconNavigationTabs,
+  UnderlinedTabs,
+  WithBadgeTabs
+} from './components'
 
 export default function TabsPage() {
   return (

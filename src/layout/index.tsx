@@ -10,7 +10,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
       </div>
 
       <DynamicBreadcrumb />
-      <div className='my-auto'>{children}</div>
+      <div className="my-auto">{children}</div>
     </div>
   )
 }

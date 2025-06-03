@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { Command, CommandGroup, CommandItem, CommandList } from './command'
 import { Command as CommandPrimitive } from 'cmdk'
 import { Badge } from './badge'
@@ -6,31 +6,105 @@ import { X } from 'lucide-react'
 
 type BaseOptions = Record<'value' | 'label', string>
 
+/**
+ * AutocompleteMultiSelect - A multi-select dropdown component with search functionality
+ * 
+ * This component provides a searchable multi-select interface where users can:
+ * - Select multiple options from a dropdown list
+ * - Search/filter options by typing
+ * - Remove selected items individually using X buttons
+ * - Remove the last selected item using backspace
+ * - View selected items as badges
+ * 
+ * @component
+ * @example
+ * ```jsx
+ * const options = [
+ *   { value: 'us', label: 'United States' },
+ *   { value: 'ca', label: 'Canada' },
+ *   { value: 'uk', label: 'United Kingdom' }
+ * ]
+ * 
+ * const [selectedCountries, setSelectedCountries] = useState(['us', 'ca'])
+ * 
+ * <AutocompleteMultiSelect
+ *   options={options}
+ *   value={selectedCountries}
+ *   onChange={setSelectedCountries}
+ * />
+ * ```
+ * 
+ * @param {Object} props - The component props
+ * @param {BaseOptions[]} props.options - Array of selectable options with value and label properties
+ * @param {string[]} [props.value=[]] - Array of currently selected option values (controlled)
+ * @param {function} props.onChange - Callback function called when selection changes, receives array of selected values
+ * 
+ * @typedef {Object} BaseOptions
+ * @property {string} value - Unique identifier for the option
+ * @property {string} label - Display text for the option
+ * 
+ * @returns {JSX.Element} The rendered multi-select component
+ */
+
 export default function AutocompleteMultiSelect({
-  options
+  options,
+  value = [],
+  onChange
 }: {
   options: BaseOptions[]
+  value?: string[]
+  onChange: (values: string[]) => void
 }) {
   const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState<BaseOptions[]>([options[1]])
+  const [selected, setSelected] = useState<BaseOptions[]>([])
   const [inputValue, setInputValue] = useState('')
 
+  useEffect(() => {
+    if (value && value.length > 0) {
+      const selectedOptions = options.filter((option) => 
+        value.includes(option.value)
+      )
+      setSelected(selectedOptions)
+    } else {
+      setSelected([])
+    }
+  }, [value, options])
+
   const handleUnselect = useCallback((data: BaseOptions) => {
-    setSelected((prev) => prev.filter((s) => s.value !== data.value))
-  }, [])
+    setSelected((prev) => {
+      const newSelected = prev.filter((s) => s.value !== data.value)
+      onChange(newSelected.map(item => item.value))
+      return newSelected
+    })
+  }, [onChange])
+
+  const handleSelect = useCallback((data: BaseOptions) => {
+    setSelected((prev) => {
+      const newSelected = [...prev, data]
+      onChange(newSelected.map(item => item.value))
+      return newSelected
+    })
+  }, [onChange])
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Backspace' && selected.length > 0) {
-        setSelected((prev) => prev.slice(0, -1))
+        setSelected((prev) => {
+          const newSelected = prev.slice(0, -1)
+          onChange(newSelected.map(item => item.value))
+          return newSelected
+        })
       }
     },
-    [selected]
+    [selected, onChange]
   )
 
   const filteredData = useMemo(
-    () => options.filter((data) => !selected.includes(data)),
-    [options, selected]
+    () => options.filter((data) => 
+      !selected.some(selectedItem => selectedItem.value === data.value) &&
+      data.label.toLowerCase().includes(inputValue.toLowerCase())
+    ),
+    [options, selected, inputValue]
   )
 
   return (
@@ -43,7 +117,7 @@ export default function AutocompleteMultiSelect({
                 <Badge
                   key={data.value}
                   variant="secondary"
-                  className="select-none"
+                  className="select-none flex items-center gap-1"
                 >
                   <span>{data.label}</span>
                   <button
@@ -89,7 +163,7 @@ export default function AutocompleteMultiSelect({
                         }}
                         onSelect={() => {
                           setInputValue('')
-                          setSelected((prev) => [...prev, data])
+                          handleSelect(data)
                         }}
                         className={'cursor-pointer'}
                       >

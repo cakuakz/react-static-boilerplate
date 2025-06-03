@@ -16,8 +16,8 @@ export const componentRoutes: RouteObject = {
   children: [
     { index: true, element: <ComponentPage /> },
     { path: 'button-page', element: <ButtonPage /> },
-    { path: 'tabs-page', element: <TabsPage />},
-    { path: 'badge-page', element: <BadgePage />},
-    { path: 'autocomplete-page', element: <AutocompletePage />}
+    { path: 'tabs-page', element: <TabsPage /> },
+    { path: 'badge-page', element: <BadgePage /> },
+    { path: 'autocomplete-page', element: <AutocompletePage /> }
   ]
 }

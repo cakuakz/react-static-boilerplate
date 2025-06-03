@@ -127,41 +127,42 @@ const addresses = [
 
 const COUNTRIES = [
   {
-    value: "us",
-    label: "United States",
+    value: 'us',
+    label: 'United States'
   },
   {
-    value: "uk",
-    label: "United Kingdom",
+    value: 'uk',
+    label: 'United Kingdom'
   },
   {
-    value: "ca",
-    label: "Canada",
+    value: 'ca',
+    label: 'Canada'
   },
   {
-    value: "au",
-    label: "Australia",
+    value: 'au',
+    label: 'Australia'
   },
   {
-    value: "fr",
-    label: "France",
+    value: 'fr',
+    label: 'France'
   },
   {
-    value: "de",
-    label: "Germany",
+    value: 'de',
+    label: 'Germany'
   },
   {
-    value: "jp",
-    label: "Japan",
+    value: 'jp',
+    label: 'Japan'
   },
   {
-    value: "br",
-    label: "Brazil",
-  },
+    value: 'br',
+    label: 'Brazil'
+  }
 ]
 
 export default function AutocompletePage() {
   const [autocompleteValue, setAutocompleteValue] = useState('')
+  const [selectedValues, setSelectedValues] = useState(['us'])
 
   const handleAutocompleteChange = (value: string) => {
     setAutocompleteValue(value)
@@ -192,6 +193,8 @@ export default function AutocompletePage() {
           <div className="flex flex-wrap gap-4">
             <AutocompleteMultiSelect 
               options={COUNTRIES}
+              value={selectedValues}
+              onChange={setSelectedValues}
             />
           </div>
         </section>
