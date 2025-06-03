@@ -1,5 +1,6 @@
-import Autocomplete from "@/components/ui/autocomplete"
-import { useState } from "react"
+import Autocomplete from '@/components/ui/autocomplete'
+import AutocompleteMultiSelect from '@/components/ui/autocomplete-multi-select'
+import { useState } from 'react'
 
 const addresses = [
   {
@@ -124,8 +125,43 @@ const addresses = [
   }
 ]
 
+const COUNTRIES = [
+  {
+    value: "us",
+    label: "United States",
+  },
+  {
+    value: "uk",
+    label: "United Kingdom",
+  },
+  {
+    value: "ca",
+    label: "Canada",
+  },
+  {
+    value: "au",
+    label: "Australia",
+  },
+  {
+    value: "fr",
+    label: "France",
+  },
+  {
+    value: "de",
+    label: "Germany",
+  },
+  {
+    value: "jp",
+    label: "Japan",
+  },
+  {
+    value: "br",
+    label: "Brazil",
+  },
+]
+
 export default function AutocompletePage() {
-  const [autocompleteValue, setAutocompleteValue] = useState('445 Rosewood Dr, Raleigh, NC 27601')
+  const [autocompleteValue, setAutocompleteValue] = useState('')
 
   const handleAutocompleteChange = (value: string) => {
     setAutocompleteValue(value)
@@ -137,7 +173,7 @@ export default function AutocompletePage() {
         Autocomplete Components
       </h1>
 
-      <div className="w-fit max-w-5xl space-y-8">
+      <div className="flex flex-col w-fit max-w-5xl space-y-8">
         <section className="space-y-4">
           <h2 className="text-xl font-semibold">Default</h2>
           <div className="flex flex-wrap gap-4">
@@ -147,6 +183,15 @@ export default function AutocompletePage() {
               onChange={handleAutocompleteChange}
               label="Street Address"
               options={addresses}
+            />
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold">Group Selection</h2>
+          <div className="flex flex-wrap gap-4">
+            <AutocompleteMultiSelect 
+              options={COUNTRIES}
             />
           </div>
         </section>
