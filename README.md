@@ -5,7 +5,7 @@ This template provides a minimal setup to get React working in Vite with HMR and
 ## 🚀 Getting Started
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/your-repo-name.git
+git clone https://github.com/cakuakz/react-static-boilerplate.git
 
 # Navigate into the project
 cd your-repo-name
