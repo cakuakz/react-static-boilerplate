@@ -55,6 +55,13 @@ export default function MainPage() {
       >
         View Components
       </Link>
+
+      <Link
+        to="/example"
+        className="mt-3 inline-block bg-primary text-neutral-300 dark:text-neutral-600 font-medium px-6 py-3 rounded-xl shadow hover:shadow-md transition duration-200"
+      >
+        View Web Example
+      </Link>
     </div>
   )
 }
